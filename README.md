@@ -42,9 +42,9 @@ Mac: https://www.python.jp/install/macos/index.html
 公式ドキュメントの以下の項目を完了させ、次の手順に進んでください。なお、既に導入済みのものは適宜飛ばして下さい。  
 ※本資料は 2020 年 12 月に作成しているため、最新の公式ドキュメントの内容と齟齬がある可能性があります。
 
-1. AWS SAM CLI のインストール
-1. AWS 認証情報の設定
-1. （任意）チュートリアル: Hello World アプリケーションの導入
+1. [AWS SAM CLI のインストール](https://docs.aws.amazon.com/ja_jp/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
+1. [AWS 認証情報の設定](https://docs.aws.amazon.com/ja_jp/serverless-application-model/latest/developerguide/serverless-getting-started-set-up-credentials.html)
+1. [（任意）チュートリアル: Hello World アプリケーションの導入](https://docs.aws.amazon.com/ja_jp/serverless-application-model/latest/developerguide/serverless-getting-started-hello-world.html)
 
 # Getting Started / Tutorial
 こちらの手順では、アプリケーション開発に必要な「LINEチャネル作成、バックエンド・フロントエンドの構築、テストデータ投入、動作確認」について説明します。
