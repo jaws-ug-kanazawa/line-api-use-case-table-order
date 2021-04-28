@@ -39,7 +39,8 @@ LINE Developers は本アプリで必要な LINE 公式アカウントの作成�
 
 1. LINE Developers にログインした状態で、以下のコンソールに遷移する  
    https://developers.line.biz/console/
-1. もし日本語表記になっていない場合には、下部にある以下のプルダウンを選択して日本語に変更する(images/line-developer-japanese.png)
+1. 日本語表記になっていない場合には、下部にある以下のプルダウンを選択して日本語に変更する
+   ![言語切替](images/line-developer-japanese.png)
 1. プロバイダー見出しの横にある作成ボタンを押下する
    ![プロバイターの作成_1_作成部分を四角で囲んだ画像](images/line-provider-create-1.png)
 1. 任意のプロバイダー名を入力し、作成を押下する
@@ -120,7 +121,9 @@ LINE Developers は本アプリで必要な LINE 公式アカウントの作成�
       1. Emailアドレス: 利用できるアドレスを入力
    1. 入力したメールアドレス宛てにLINE Payからメールが来ていることを確認する。
    1. [pay.line.me](https://pay.line.me/portal/jp/auth/login)にアクセスし、メールに記載されたアカウント情報(テストIDとパスワード)にて加盟店センターにログインする。
-   1. ログイン後、左メニューの決済連動管理 -> 連動キー管理 のリンクを押下  
+   1. ログイン後、日本語表記になっていない場合には、右上にある日本語をクリックし日本語表記に変更する。
+      ![言語切替](images/linepay-japanese.png)
+   1.左メニューの決済連動管理 -> 連動キー管理 のリンクを押下  
    ![連動キー管理](images/linepay-key.png)
    1. ログイン時と同様のパスワードを入力し、確認を押下
    1. 以下画像のように表示されたChannel IDとChannel Secret Keyを後ほどの手順で利用するのでメモしておく。
