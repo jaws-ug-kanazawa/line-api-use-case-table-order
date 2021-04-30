@@ -10,22 +10,26 @@
 
 # Libraries
 ## Node.js
-フロントエンド側の開発で使用する Node.js をローカル開発環境にインストールしてください。  
+
+Cloud9にはすでにNode.jsのバージョン10.24.1がインストール済みです。
+
+Cloud9以外の環境で開発する場合においては、フロントエンド側の開発で使用する Node.js をローカル開発環境にインストールしてください。  
 ※ v10.13 以上 最新の LTS バージョンのインストールをおすすめします
 
 【Node.jsダウンロードサイト】  
 https://nodejs.org/ja/download/
 
 ## Python
-Pythonのバージョン3.8以上がインストール済みでない場合、インストールしてください。  
+
+Cloud9にはすでにPythonのバージョン3.7.9がインストール済みです。
 コマンドプロンプト、又はターミナルにて以下のコマンドを入力し、インストール済みか確認できます。
 ```
 python --version
 
-Python 3.8.3 ← このように表示されたら、インストール済みです。
+Python 3.7.9 ← このように表示されたら、インストール済みです。
 ```
 
-インストール済みでない場合、バックエンド側の開発で使用するPython（3.8以上）をローカル開発環境にインストールしてください。
+Cloud9以外の環境で開発する場合においては、Pythonがインストール済みでない場合、バックエンド側の開発で使用するPython（3.8以上）をローカル開発環境にインストールしてください。
 
 【Pythonインストール参考サイト】  
 Windows: https://www.python.jp/install/windows/install.html  
@@ -37,6 +41,28 @@ Mac: https://www.python.jp/install/macos/index.html
 )を参考に、AWS アカウントの登録と設定、AWS SAM CLI と Docker のインストールを行ってください。  
 ※ SAM CLIの推奨バージョンは1.15.0以上  
 ※ Docker のインストールもローカルテストの有無に関わらず必要です。
+
+## ディスク容量の拡張
+
+Cloud9の初期EBSサイズは10GiBです。SAMを利用する際に10GBを超える容量のサイズが必要となるため、以下の方法にてEBSボリュームサイズを20GBに変更してください。
+
+```
+git clone https://github.com/jaws-ug-kanazawa/line-api-use-case-table-order.git
+cd line-api-use-case-table-order/tools/
+sh resize.sh 20
+```
+
+df -Hのコマンドを実行し、/dev/xvda1が20GiB(22GB)になっていることを確認してください。
+```
+Filesystem      Size  Used Avail Use% Mounted on
+devtmpfs        497M     0  497M   0% /dev
+tmpfs           516M     0  516M   0% /dev/shm
+tmpfs           516M  566k  515M   1% /run
+tmpfs           516M     0  516M   0% /sys/fs/cgroup
+/dev/xvda1       22G   12G   11G  52% /
+tmpfs           104M     0  104M   0% /run/user/1000
+tmpfs           104M     0  104M   0% /run/user/0
+```
 
 ### 公式ドキュメントの参考箇所
 公式ドキュメントの以下の項目を完了させ、次の手順に進んでください。なお、既に導入済みのものは適宜飛ばして下さい。  
