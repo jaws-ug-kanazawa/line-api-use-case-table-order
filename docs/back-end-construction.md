@@ -4,8 +4,18 @@
 
 本アプリでは以下の周辺リソースをデプロイする必要があります。
 
+1. ソースの入手
 1. 共通処理レイヤー(Layer)
 1. 定期実行バッチ(batch)
+
+### 1.ソースの入手
+
+- 以下コマンドの実行
+
+```
+git clone https://github.com/jaws-ug-kanazawa/line-api-use-case-table-order.git
+cd line-api-use-case-table-order/
+```
 
 ### 1.共通処理レイヤー(Layer)
 
@@ -23,12 +33,14 @@ AWS Lambda では複数 Lambda 関数で共通化して利用したい処理を�
 cd [backend -> Layerのフォルダ]
 sam build --use-container
 sam deploy --guided
-※プロファイル情報(default)以外を使用する場合は指定必要 sam deploy --guided --profile xxx
+※プロファイル情報(default)以外を使用する場合は指定が必要 sam deploy --guided --profile xxx
     Stack Name : 任意のスタック名
     AWS Region : ap-northeast-1
     Parameter Environment: dev
-    #Shows you resources changes to be deployed and require a 'Y' to initiate deploy Confirm changes before deploy [Y/n]: Y
-    #SAM needs permission to be able to create roles to connect to the resources in your template Allow SAM CLI IAM role creation[Y/n]: Y
+    #Shows you resources changes to be deployed and require a 'Y' to initiate deploy
+    Confirm changes before deploy [Y/n]: Y
+    #SAM needs permission to be able to create roles to connect to the resources in your template
+    Allow SAM CLI IAM role creation[Y/n]: Y
     Save arguments to samconfig.toml [Y/n]: Y
 
     SAM configuration file [samconfig.toml]: 入力せずEnter 
@@ -69,11 +81,13 @@ cd [backend -> batch]のtemplate.yamlが配置されたフォルダ]
 sam build --use-container
 sam deploy --guided
 ※プロファイル情報(default)以外を使用する場合は指定必要 sam deploy --guided --profile xxx
-    Stack Name : 任意のスタック名
+    Stack Name : 任意のスタック名（1.共通処理レイヤー(Layer) で使用したスタック名と違う名称にする必要あり）
     AWS Region : ap-northeast-1
     Parameter Environment: dev
-    #Shows you resources changes to be deployed and require a 'Y' to initiate deploy Confirm changes before deploy [Y/n]: Y
-    #SAM needs permission to be able to create roles to connect to the resources in your template Allow SAM CLI IAM role creation[Y/n]: Y
+    #Shows you resources changes to be deployed and require a 'Y' to initiate deploy
+    Confirm changes before deploy [Y/n]: Y
+    #SAM needs permission to be able to create roles to connect to the resources in your template
+    Allow SAM CLI IAM role creation[Y/n]: Y
     Save arguments to samconfig.toml [Y/n]: Y
 
     SAM configuration file [samconfig.toml]: 入力せずEnter 
