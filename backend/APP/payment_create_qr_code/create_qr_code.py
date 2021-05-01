@@ -12,7 +12,7 @@ import paypayopa
 REDIRECT_URL = os.environ.get("REDIRECT_URL")
 LOGGER_LEVEL = os.environ.get("LOGGER_LEVEL")
 LIFF_CHANNEL_ID = os.getenv('LIFF_CHANNEL_ID', None)
-# Pay Pay API情報
+# PayPay API情報
 PAY_PAY_API_KEY = os.environ.get("PAY_PAY_API_KEY")
 PAY_PAY_API_SECRET = os.environ.get("PAY_PAY_API_SECRET")
 PAY_PAY_API_MERCHANTPAYMENTID = os.environ.get("PAY_PAY_API_MERCHANTPAYMENTID")

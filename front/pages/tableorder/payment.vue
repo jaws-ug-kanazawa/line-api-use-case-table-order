@@ -153,12 +153,12 @@ export default {
                 //　LINE Pay決済画面に遷移
                 window.location = response.info.paymentUrl.web;
             } else if (method == 'paypay') {
-                // Pay Payを呼び出しています..
+                // PayPayを呼び出しています..
                 this.$processing.show(0, this.$t("payment.msg012"));
                 const response = await this.$tableorder.createQRCodePayment(paymentId);
                             
                 this.$processing.hide();
-                //　Pay Pay決済画面に遷移
+                //　PayPay決済画面に遷移
                 window.location = response.data.url;
             } else if (method == 'staffPay') {
                 // スタッフを呼び出し、決済手続きをしています..

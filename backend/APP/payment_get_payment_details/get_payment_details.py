@@ -13,7 +13,7 @@ import paypayopa
 
 # 環境変数
 LOGGER_LEVEL = os.environ.get("LOGGER_LEVEL")
-# Pay Pay API
+# PayPay API
 PAY_PAY_API_KEY = os.environ.get("PAY_PAY_API_KEY")
 PAY_PAY_API_SECRET = os.environ.get("PAY_PAY_API_SECRET")
 PAY_PAY_API_MERCHANTPAYMENTID = os.environ.get("PAY_PAY_API_MERCHANTPAYMENTID")
