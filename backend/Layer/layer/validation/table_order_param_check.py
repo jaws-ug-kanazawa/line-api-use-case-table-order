@@ -40,6 +40,9 @@ class TableOrderParamCheck(ParamCheck):
 
         return self.error_msg
 
+    def check_api_get_payment_details(self):
+        self.check_payment_id()
+
     def check_table_id(self):
         if error := self.check_required(self.table_id, 'tableId'):
             self.error_msg.append(error)
