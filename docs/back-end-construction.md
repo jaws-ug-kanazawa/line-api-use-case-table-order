@@ -4,9 +4,9 @@
 
 本アプリでは以下の周辺リソースをデプロイする必要があります。
 
-1. ソースの入手
-1. 共通処理レイヤー(Layer)
-1. 定期実行バッチ(batch)
+* ソースの入手
+* 共通処理レイヤー(Layer)
+* 定期実行バッチ(batch)
 
 ### 1.ソースの入手
 
@@ -17,7 +17,7 @@ git clone https://github.com/jaws-ug-kanazawa/line-api-use-case-table-order.git
 cd line-api-use-case-table-order/
 ```
 
-### 1.共通処理レイヤー(Layer)
+### 2.共通処理レイヤー(Layer)
 
 AWS Lambda では複数 Lambda 関数で共通化して利用したい処理をレイヤーとして記述することが出来ます。
 本アプリではレイヤーを利用しているので、はじめに以下の手順で、レイヤーをデプロイしてください。
@@ -57,7 +57,7 @@ sam deploy --guided
 
 - 【確認】AWS マネジメントコンソールで Lambda のコンソールを開き、左タブから「レイヤー」を選択し、今回デプロイしたレイヤーがあることを確認する。
 
-### 2.定期実行バッチ(batch)
+### 3.定期実行バッチ(batch)
 本アプリで必要な短期チャネルアクセストークン更新バッチをデプロイします。
 短期チャネルアクセストークンは有効期限が取得後 30 日間なので、有効期限の前に短期チャネルアクセストークンを再取得してテーブル更新をするバッチを毎日定刻に動作させています。  
 定刻にバッチを動作させるために、Amazon EventBridge([公式ドキュメント](https://docs.aws.amazon.com/ja_jp/eventbridge/latest/userguide/what-is-amazon-eventbridge.html))を用いています。  
@@ -69,7 +69,7 @@ sam deploy --guided
   - `LINEChannelAccessTokenDBName` 任意のテーブル名(短期チャネルアクセストークンを管理するテーブル)
   - `EventBridgeName` 任意のイベントブリッジ名  
     例) AccessTokenUpdateEvent
-  - `LayerVersion` 【1.共通処理レイヤー】の手順にてデプロイしたレイヤーのバージョン番号  
+  - `LayerVersion` [共通処理レイヤー](#2共通処理レイヤーlayer)の手順にてデプロイしたレイヤーのバージョン番号  
     例）LayerVersion: 1
   - `LoggerLevel` INFO or Debug  
     例）INFO
@@ -81,7 +81,7 @@ cd [backend -> batch]のtemplate.yamlが配置されたフォルダ]
 sam build --use-container
 sam deploy --guided
 ※プロファイル情報(default)以外を使用する場合は指定必要 sam deploy --guided --profile xxx
-    Stack Name : 任意のスタック名（1.共通処理レイヤー(Layer) で使用したスタック名と違う名称にする必要あり）
+    Stack Name : 任意のスタック名（[共通処理レイヤー](#2共通処理レイヤーlayer)で使用したスタック名と違う名称にする必要あり）
     AWS Region : ap-northeast-1
     Parameter Environment: dev
     #Shows you resources changes to be deployed and require a 'Y' to initiate deploy
@@ -98,21 +98,23 @@ sam deploy --guided
 
 - テーブルにチャネル ID とチャネルシークレットを登録する
   - AWS マネジメントコンソールにログインし、DynamoDB のコンソールを開く
-  - 先ほど作成した「短期チャネルアクセストークンを管理するテーブル」にて項目の作成を行い、【LINE チャネルの作成】で作成したMessaging APIのチャネルのチャネル ID とチャネルシークレットを以下の通り登録する。
+  - テーブルメニューを開き、[定期実行バッチ(batch)](#3定期実行バッチbatch)の手順において、LINEChannelAccessTokenDBNameで指定した名前のテーブルを開く
+  - 項目タブを選択し、項目の作成ボタンを押下する
+  - [LINE チャネルの作成](back-end-construction.md#4チャネルの作成)で作成したMessaging APIのチャネルのチャネル ID とチャネルシークレットを以下の通り登録する。
     なお、チャネル ID とチャネルシークレットは[LINE Developers コンソール](https://developers.line.biz/console/)のチャネル基本設定にて確認可能。
     - channelId: チャネル ID (文字列)
     - channelSecret : チャネルシークレット(文字列)
       ![チャネルアクセストークンの登録](images/channel-access-token-table-record.png)
 - チャネルアクセストークン更新の Lambda 関数を実行する
   - AWS マネジメントコンソールにログインし、Lambda のコンソールを開く
-  - 先ほど作成した Lambda 関数(関数名は TableOrder-PutAccessToken-{Enviromentで指定した値})を開く
-  - Lambda 関数のコンソール右上、テストイベントの選択プルダウンにて「テストイベントの設定」を選択する
-  - 以下のようなウィンドウが開いたら、イベント名を入力し、イベント内容を空にして作成ボタンを押下する。
+  - 関数メニューを開き、先ほど作成した Lambda 関数(関数名は TableOrder-PutAccessToken-{Enviromentで指定した値})を選択する
+  - Lambda 関数のコンソール中段のテストタブを選択する
+  - 任意の名前を入力し、以下のようにイベント内容を空にしてテストボタンを押下する
     ![テストイベントの設定](images/test-event-set.png)
-  - Lambda 関数のコンソール右上、テストボタンを押下してテスト実行を行う
+  - 実行結果が成功になることを確認する
 - 【確認】AWS マネジメントコンソールの DynamoDB コンソールにて、チャネルアクセストークンのテーブル開き、本アプリで利用する LINE チャネル ID のデータに channelAccessToken,limitDate,updatedTime の項目が追加されていることを確認する。
 
-## アプリのデプロイ(APP)
+## 4.アプリのデプロイ(APP)
 
 以下の手順で、アプリ本体をデプロイしてください。
 
@@ -120,22 +122,22 @@ sam deploy --guided
   backend -> APP フォルダ内の template.yaml を開き、EnvironmentMap の dev の以下のパラメータ項目を修正する。
   ※S3のアクセスログが必要な場合、ACCESS LOG SETTING とコメントされている箇所のコメントを解除してください。
 
-  - `LineChannelId` 【LINE チャネルの作成】で作成したMessaging APIチャネルのチャネル ID
-  - `LIFFChannelId` 【LINE チャネルの作成】で作成したLIFFチャネルのチャネル ID
-  - `LiffUrl` 【LINE チャネルの作成】で作成したLIFFアプリの LIFF URL
-  - `LinePayChannelId` 【LINE チャネルの作成】で作成したLINE Payチャネルのチャネル ID
-  - `LinePayChannelSecret` 【LINE チャネルの作成】で作成したLINE Payチャネルのチャネルシークレット  
+  - `LineChannelId` [LINE チャネルの作成](liff-channel-create.md#4チャネルの作成)で作成したMessaging APIチャネルのチャネル ID
+  - `LIFFChannelId` [LINE チャネルの作成](liff-channel-create.md#4チャネルの作成)で作成したLIFFチャネルのチャネル ID
+  - `LiffUrl` [LINE チャネルの作成](liff-channel-create.md#4チャネルの作成)で作成したLIFFアプリの LIFF URL
+  - `LinePayChannelId` [LINE チャネルの作成](liff-channel-create.md#4チャネルの作成)で作成したLINE Payチャネルのチャネル ID
+  - `LinePayChannelSecret` [LINE チャネルの作成](liff-channel-create.md#4チャネルの作成)で作成したLINE Payチャネルのチャネルシークレット  
   - `LinePayIsSandbox` True or False  
     ※基本Trueを指定してください。  
     True: Sandbox環境を使用します。LINEPayによる課金は行われません。  
     False: LINEPay「テスト加盟店環境」を使用します。一時的に利用者のLINEPay残高が実際に引き落とされた状態となり、一定時間後に利用額が返金されます。
   - `ItemListDBName` 任意のテーブル名（商品情報を登録するテーブル）
   - `PaymentInfoDBName` 任意のテーブル名（支払い情報を登録するテーブル）
-  - `LINEChannelAccessTokenDBName` 【2.定期実行バッチ】の手順でデプロイした「短期チャネルアクセストークンを管理するテーブル」のテーブル名
-  - `FrontS3BucketName` 任意のバケット名 ※フロント側モジュールを配置するための S3 バケット名になります。
-  - `LayerVersion` 【1.共通処理レイヤー】の手順にてデプロイしたレイヤーのバージョン番号  
+  - `LINEChannelAccessTokenDBName` [定期実行バッチ(batch)](#3定期実行バッチbatch)の手順でデプロイした「短期チャネルアクセストークンを管理するテーブル」のテーブル名
+  - `FrontS3BucketName` 任意のバケット名（但し、すべてのユーザにて一意となるため、table-order-(username)-(YYYMMDD) のような名称を推奨） ※フロント側モジュールを配置するための S3 バケット名になります。
+  - `LayerVersion` [共通処理レイヤー](#2共通処理レイヤーlayer)の手順にてデプロイしたレイヤーのバージョン番号  
     例）LayerVersion: 1  
-  - `LoggerLevel` INFO or Debug  
+  - `LoggerLevel` INFO or Debug (ログレベル情報の選択)
   - `LambdaMemorySize` Lambdaのメモリサイズ  
     例）LambdaMemorySize: 128 ※特に変更する必要がない場合、最小サイズの128を指定してください。
   - `TTL` True or False (注文情報を自動で削除するか否か)
@@ -152,11 +154,13 @@ cd [backend -> APP のフォルダ]
 sam build --use-container
 sam deploy --guided
 ※プロファイル情報(default)以外を使用する場合は指定必要 sam deploy --guided --profile xxx
-    Stack Name : 任意のスタック名
+    Stack Name : 任意のスタック名（[共通処理レイヤー](#2共通処理レイヤーlayer)、[定期実行バッチ(batch)](#3定期実行バッチbatch)で使用したスタック名と違う名称にする必要あり）
     AWS Region : ap-northeast-1
     Parameter Environment: dev
-    #Shows you resources changes to be deployed and require a 'Y' to initiate deploy Confirm changes before deploy [Y/n]: Y
-    #SAM needs permission to be able to create roles to connect to the resources in your template Allow SAM CLI IAM role creation[Y/n]: Y
+    #Shows you resources changes to be deployed and require a 'Y' to initiate deploy
+    Confirm changes before deploy [Y/n]: Y
+    #SAM needs permission to be able to create roles to connect to the resources in your template
+    Allow SAM CLI IAM role creation[Y/n]: Y
     ××××× may not have authorization defined, Is this okay? [y/N]: y (全てyと入力)  
     Save arguments to samconfig.toml [Y/n]: Y
 
