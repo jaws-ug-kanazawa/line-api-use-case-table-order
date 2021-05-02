@@ -46,11 +46,14 @@
                     <v-card-title style="font-size:1.0rem;">
                         <span style="margin: 0 auto;"><v-icon large v-show="method.image==''">mdi-cash-register</v-icon>{{ method.title }}</span>
                     </v-card-title>
-                    <v-card-title v-show="method.image!=''" class="pt-0 pb-5">
+                    <v-card-title v-show="method.title=='LINE Pay'" class="pt-0 pb-5">
                         <img style="width:30%; margin: 0 auto;" :src="method.image" :alt="method.title"/>
                         <div class="mt-3 red--text font-weight-bold" style="width: 100%; font-size: 0.5em; margin: 0 auto; line-height: 1.5em; text-align:center;">
                             <span v-html="$t('payment.msg008')"></span>
                         </div>
+                    </v-card-title>
+                    <v-card-title v-show="method.title=='PayPay'" class="pt-0 pb-5">
+                        <img style="width:30%; margin: 0 auto;" :src="method.image" :alt="method.title"/>
                     </v-card-title>
                 </v-card>
             </v-card>
@@ -106,6 +109,7 @@ export default {
             dialog: false,
             paymentMethods: [
                 { title: 'LINE Pay', method: 'linePay', flex: 10, flex_sm: 6, image: require('@/assets/img/line_pay.png') },
+                { title: 'PayPay', method: 'paypay', flex: 10, flex_sm: 6, image: require('@/assets/img/paypay_2.png') },
                 { title: this.$t("payment.msg009"), method: 'staffPay', flex: 10, flex_sm: 4, image: '' }
             ],
             total: null,
@@ -148,6 +152,14 @@ export default {
                 this.$processing.hide();
                 //　LINE Pay決済画面に遷移
                 window.location = response.info.paymentUrl.web;
+            } else if (method == 'paypay') {
+                // PayPayを呼び出しています..
+                this.$processing.show(0, this.$t("payment.msg012"));
+                const response = await this.$tableorder.createQRCodePayment(paymentId);
+                            
+                this.$processing.hide();
+                //　PayPay決済画面に遷移
+                window.location = response.data.url;
             } else if (method == 'staffPay') {
                 // スタッフを呼び出し、決済手続きをしています..
                 this.$processing.show(0, this.$t("payment.msg011"));

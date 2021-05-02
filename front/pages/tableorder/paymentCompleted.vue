@@ -13,6 +13,7 @@
                     <p>{{ $t("paymentCompleted.msg002") }}</p>
                     <div>
                         <img src="~/assets/img/line_pay2.png" alt="LINE Pay" v-show="linepay">
+                        <img src="~/assets/img/paypay.png" alt="PayPay" width="50%" height="50%" v-show="paypay">
                     </div>
                     <v-btn color="#00B900" class="white--text ma-5" width="200px" v-on:click="$router.push('/')">
                         <v-icon>house</v-icon><span>&nbsp;{{ $t("paymentCompleted.msg003") }}</span>
@@ -32,18 +33,33 @@ export default {
     layout: "tableorder/order",
     async asyncData({ app, store, query, $axios, route }) {
         // スタッフ呼び出しの場合
-        if(typeof query["transactionId"] === "undefined") {
+        let linepay = false
+        let paypay = false
+        if(typeof query["orderId"] === "undefined") {
             store.commit("paymentId", null);
             return {
                 success: true,
-                linepay: false,
+                linepay: linepay,
+                paypay: paypay,
             }
+        } else if (typeof query["transactionId"] === "undefined") {
+            linepay = false
+            paypay = true
+        } else if (query["transactionId"]) {
+            linepay = true
+            paypay = false
         }
-        // 決済完了API呼び出し(LINE Payから返ってくるパラメータを渡す)
+        // 決済完了API呼び出し(Payから返ってくるパラメータを渡す)
         const transactionId = query["transactionId"];
         const paymentId = query["orderId"];
         
-        const isPaymentError = await app.$tableorder.confirmPayment(transactionId, paymentId);
+        let isPaymentError = null
+        
+        if (linepay) {
+            isPaymentError = await app.$tableorder.confirmPayment(transactionId, paymentId);
+        } else if (paypay) {
+            isPaymentError = await app.$tableorder.getPaymentDetails(paymentId);
+        }
 
         let success = true;
         if (isPaymentError) {
@@ -55,7 +71,8 @@ export default {
 
         return {
             success: success,
-            linepay: true,
+            linepay: linepay,
+            paypay: paypay,
         }
     },
     head() {
@@ -67,6 +84,7 @@ export default {
         return {
             success: null,
             linepay: null,
+            paypay: null,
         }
     },
 }

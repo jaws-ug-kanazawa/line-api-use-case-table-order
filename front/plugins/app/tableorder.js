@@ -124,6 +124,33 @@ const VueTableorder = ($axios, app, store, env) => {
             return response;    
         },
         /**
+         * PayPay決済QRCode作成
+         *
+         * @param {string} paymentId 会計ID
+         * @return {Object} PayPay情報
+         */
+        async createQRCodePayment(paymentId) {
+            // LIFF ID Token取得
+            const idToken = store.state.lineUser.idToken;
+            
+            const params = {"idToken": idToken, "paymentId": paymentId};
+            const response = await this[_module].paymentCreateQRCode(params);
+            return response;    
+ 
+        },
+        /**
+         * PayPay決済詳細取得
+         *
+         * @param {string} transactionId 決済トランザクションID
+         * @param {string} paymentId 会計ID
+         * @return {Object} 決済状況
+         */
+        async getPaymentDetails(paymentId) {
+            const params = {"paymentId": paymentId};
+            const response = await this[_module].getPaymentDetails(params);
+            return response;
+        },
+        /**
          * 会計ID取得　
          *
          * @return {string} paymentId  
@@ -261,6 +288,35 @@ const VueTableorder = ($axios, app, store, env) => {
                 // POST送信
                 const response = await $axios.post(`${_stage}/confirm_nolinepay`, params);
                 return response.status==200 ? response.data : null;
+            },
+            /**
+             * 決済QRCode作成API
+             *
+             * @param {Object} params 送信パラメーター
+             * @return {Object} APIレスポンス内容 
+             */
+            paymentCreateQRCode: async(params) => {
+                // 送信パラメーターロケール付加
+                params['locale'] = store.state.locale;
+                // POST送信
+                const response = await $axios.post(`${_stage}/payment_create_qr_code`, params);
+                return response.status==200 ? response.data : null;
+            },
+            /**
+             * 決済詳細取得API
+             *
+             * @param {Object} params 送信パラメーター
+             * @return {Object} APIレスポンス内容 
+             */
+            getPaymentDetails: async(params) => {
+                // 送信パラメーターロケール付加
+                params['locale'] = store.state.locale;
+                // POST送信
+                const response = await $axios.post(`${_stage}/payment_get_payment_details`, params);
+                if ( response && response.status >= 400 ) {
+                    store.commit("paymentError", true);
+                }
+                return response.status==200 ? false : true;
             },
             /**
              * 会計ID取得API
@@ -446,6 +502,54 @@ const VueTableorder = ($axios, app, store, env) => {
                 }
 
                 return response;
+            },
+            /**
+             *決済QRCode作成API
+             *
+             * @param {Object} params 送信パラメーター
+             * @return {Object} APIレスポンス内容 
+             */
+            paymentCreateQRCode: async(params) => {
+                let response = null;
+                // 送信パラメーターロケール付加
+                params['locale'] = store.state.locale;
+                // 送信パラメーター
+                const myInit = {
+                    body: params,
+                };
+                // POST送信
+                try {
+                    response = await app.$amplify.API.post("LambdaAPIGateway", `${_stage}/payment_create_qr_code`, myInit);
+                } catch (error) {
+                    app.$utils.showHttpError(error);
+                }
+
+                return response;
+            },
+            /**
+             *決済詳細取得API
+             *
+             * @param {Object} params 送信パラメーター
+             * @return {Object} APIレスポンス内容 
+             */
+            getPaymentDetails: async(params) => {
+                let response = null;
+                // 送信パラメーターロケール付加
+                params['locale'] = store.state.locale;
+                // 送信パラメーター
+                const myInit = {
+                    body: params,
+                };
+                // POST送信
+                let isError = false;
+                try {
+                    response = await app.$amplify.API.post("LambdaAPIGateway", `${_stage}/payment_get_payment_details`, myInit);
+                } catch (error) {
+                    app.$utils.showHttpError(error);
+                    isError = true;
+                }
+
+                return isError;
             },
             /**
              * 会計ID取得API

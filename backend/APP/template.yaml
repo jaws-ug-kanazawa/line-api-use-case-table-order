@@ -23,10 +23,15 @@ Mappings:
     dev:
       LineChannelId: LineChannelId
       LIFFChannelId: LIFFChannelId
-      LiffUrl: https://liff.line.me/LIFF-ID
+      LiffUrl: LIFF URL
       LinePayChannelId: LinePayChannelId
       LinePayChannelSecret: LinePayChannelSecret
       LinePayIsSandbox: True or False
+      PayPayApiKey: PayPayApiKey
+      PayPayApiSecret: PayPayApiSecret
+      PayPayApiMerchantPaymentId: PayPayApiMerchantPaymentId
+      PayPayIsProd: True or False
+      PayPayIsSandbox: True or False
       ItemListDBName: ItemListDBName
       PaymentInfoDBName: PaymentInfoDBName
       LINEChannelAccessTokenDBName: LINEChannelAccessTokenDBTableOrderDev
@@ -50,6 +55,11 @@ Mappings:
       LinePayChannelId: LinePayChannelId
       LinePayChannelSecret: LinePayChannelSecret
       LinePayIsSandbox: True or False
+      PayPayApiKey: PayPayApiKey
+      PayPayApiSecret: PayPayApiSecret
+      PayPayApiMerchantPaymentId: PayPayApiMerchantPaymentId
+      PayPayIsProd: True or False
+      PayPayIsSandbox: True or False
       ItemListDBName: ItemListDBName
       PaymentInfoDBName: PaymentInfoDBName
       LINEChannelAccessTokenDBName: LINEChannelAccessTokenDBTableOrderProd
@@ -347,6 +357,90 @@ Resources:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /confirm_nolinepay
+            Method: post
+            RestApiId:
+              Ref: TableOrderApiGateway
+  CreateQRCode:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: payment_create_qr_code/
+      FunctionName: !Sub TableOrder-PaymentCreateQRCode-${Environment}
+      Handler: create_qr_code.lambda_handler
+      Runtime: python3.8
+      Layers:
+        - !Join
+          - ":"
+          - - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer"
+            - !ImportValue TableOrderLayerDev
+            - !FindInMap [EnvironmentMap, !Ref Environment, LayerVersion]
+      Role: !GetAtt LambdaRole.Arn
+      Environment:
+        Variables:
+          LIFF_CHANNEL_ID:
+            !FindInMap [EnvironmentMap, !Ref Environment, LIFFChannelId]
+          PAY_PAY_API_KEY:
+            !FindInMap [EnvironmentMap, !Ref Environment, PayPayApiKey]
+          PAY_PAY_API_SECRET:
+            !FindInMap [EnvironmentMap, !Ref Environment, PayPayApiSecret]
+          PAY_PAY_API_MERCHANTPAYMENTID:
+            !FindInMap [EnvironmentMap, !Ref Environment, PayPayApiMerchantPaymentId]
+          PAY_PAY_IS_PROD:
+            !FindInMap [EnvironmentMap, !Ref Environment, PayPayIsProd]
+          REDIRECT_URL:
+            !FindInMap [EnvironmentMap, !Ref Environment, LiffUrl]
+          LOGGER_LEVEL:
+            !FindInMap [EnvironmentMap, !Ref Environment, LoggerLevel]
+          PAYMENT_ORDER_DB: !Ref PaymentOrderInfo
+      Events:
+        ReservePayment:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /payment_create_qr_code
+            Method: post
+            RestApiId:
+              Ref: TableOrderApiGateway
+  GetPaymentDetails:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: payment_get_payment_details/
+      FunctionName: !Sub TableOrder-GetPaymentDetails-${Environment}
+      Handler: get_payment_details.lambda_handler
+      Runtime: python3.8
+      Layers:
+        - !Join
+          - ":"
+          - - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer"
+            - !ImportValue TableOrderLayerDev
+            - !FindInMap [EnvironmentMap, !Ref Environment, LayerVersion]
+      Role: !GetAtt LambdaRole.Arn
+      Environment:
+        Variables:
+          LIFF_URL: !FindInMap [EnvironmentMap, !Ref Environment, LiffUrl]
+          LINE_CHANNEL_ID:
+            !FindInMap [EnvironmentMap, !Ref Environment, LineChannelId]
+          PAY_PAY_API_KEY:
+            !FindInMap [EnvironmentMap, !Ref Environment, PayPayApiKey]
+          PAY_PAY_API_SECRET:
+            !FindInMap [EnvironmentMap, !Ref Environment, PayPayApiSecret]
+          PAY_PAY_API_MERCHANTPAYMENTID:
+            !FindInMap [EnvironmentMap, !Ref Environment, PayPayApiMerchantPaymentId]
+          PAY_PAY_IS_PROD:
+            !FindInMap [EnvironmentMap, !Ref Environment, PayPayIsProd]
+          LOGGER_LEVEL:
+            !FindInMap [EnvironmentMap, !Ref Environment, LoggerLevel]
+          TTL_DAY: !FindInMap [EnvironmentMap, !Ref Environment, TTLDay]
+          PAYMENT_ORDER_DB: !Ref PaymentOrderInfo
+          CHANNEL_ACCESS_TOKEN_DB:
+            !FindInMap [
+              EnvironmentMap,
+              !Ref Environment,
+              LINEChannelAccessTokenDBName,
+            ]
+      Events:
+        ConfirmPayment:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /payment_get_payment_details
             Method: post
             RestApiId:
               Ref: TableOrderApiGateway
