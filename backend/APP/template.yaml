@@ -30,6 +30,7 @@ Mappings:
       PayPayApiKey: PayPayApiKey
       PayPayApiSecret: PayPayApiSecret
       PayPayApiMerchantPaymentId: PayPayApiMerchantPaymentId
+      PayPayIsProd: True or False
       PayPayIsSandbox: True or False
       ItemListDBName: ItemListDBName
       PaymentInfoDBName: PaymentInfoDBName
@@ -57,6 +58,7 @@ Mappings:
       PayPayApiKey: PayPayApiKey
       PayPayApiSecret: PayPayApiSecret
       PayPayApiMerchantPaymentId: PayPayApiMerchantPaymentId
+      PayPayIsProd: True or False
       PayPayIsSandbox: True or False
       ItemListDBName: ItemListDBName
       PaymentInfoDBName: PaymentInfoDBName
