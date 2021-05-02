@@ -11,25 +11,42 @@
 # Libraries
 ## Node.js
 
-Cloud9にはすでにNode.jsのバージョン10.24.1がインストール済みです。
+フロントエンド側の開発で使用する Node.js をローカル開発環境にインストールしてください。
+※ v10.13 以上 最新の LTS バージョンのインストールをおすすめします。なお、Cloud9にはすでにNode.jsのバージョン10.24.1がインストール済みです。
 
-Cloud9以外の環境で開発する場合においては、フロントエンド側の開発で使用する Node.js をローカル開発環境にインストールしてください。  
-※ v10.13 以上 最新の LTS バージョンのインストールをおすすめします
+```
+node -v
+v10.24.1 
+```
+↑ このように表示されたら、インストール済みです。
 
 【Node.jsダウンロードサイト】  
 https://nodejs.org/ja/download/
 
 ## Python
 
-Cloud9にはすでにPythonのバージョン3.7.9がインストール済みです。
+Pythonのバージョン3.8以上がインストール済みでない場合、インストールしてください。  
+2021-04-28時点では、Pythonは3.7.9がインストールされているため、3.8を以下のコマンドでインストールしてください。
+
+```
+git clone https://github.com/jaws-ug-kanazawa/line-api-use-case-table-order.git
+cd line-api-use-case-table-order/tools/
+sh install_python3.8.sh
+```
+
 コマンドプロンプト、又はターミナルにて以下のコマンドを入力し、インストール済みか確認できます。
 ```
 python --version
-
-Python 3.7.9 ← このように表示されたら、インストール済みです。
+Python 3.8.5
 ```
 
-Cloud9以外の環境で開発する場合においては、Pythonがインストール済みでない場合、バックエンド側の開発で使用するPython（3.8以上）をローカル開発環境にインストールしてください。
+```
+pip --version
+pip 9.0.3 from /usr/lib/python3.8/site-packages (python 3.8)
+```
+↑ このように表示されたら、インストール済みです。
+
+Cloud9以外の環境で開発する場合においてPythonがインストール済みでない場合、バックエンド側の開発で使用するPython（3.8以上）をローカル開発環境にインストールしてください。
 
 【Pythonインストール参考サイト】  
 Windows: https://www.python.jp/install/windows/install.html  
@@ -47,7 +64,6 @@ Mac: https://www.python.jp/install/macos/index.html
 Cloud9の初期EBSサイズは10GiBです。SAMを利用する際に10GBを超える容量のサイズが必要となるため、以下の方法にてEBSボリュームサイズを20GBに変更してください。
 
 ```
-git clone https://github.com/jaws-ug-kanazawa/line-api-use-case-table-order.git
 cd line-api-use-case-table-order/tools/
 sh resize.sh 20
 ```
