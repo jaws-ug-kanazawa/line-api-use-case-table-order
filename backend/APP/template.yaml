@@ -31,7 +31,6 @@ Mappings:
       PayPayApiSecret: PayPayApiSecret
       PayPayApiMerchantId: PayPayApiMerchantId
       PayPayIsProd: True or False
-      PayPayIsSandbox: True or False
       ItemListDBName: ItemListDBName
       PaymentInfoDBName: PaymentInfoDBName
       LINEChannelAccessTokenDBName: LINEChannelAccessTokenDBTableOrderDev
@@ -59,7 +58,6 @@ Mappings:
       PayPayApiSecret: PayPayApiSecret
       PayPayApiMerchantId: PayPayApiMerchantId
       PayPayIsProd: True or False
-      PayPayIsSandbox: True or False
       ItemListDBName: ItemListDBName
       PaymentInfoDBName: PaymentInfoDBName
       LINEChannelAccessTokenDBName: LINEChannelAccessTokenDBTableOrderProd
