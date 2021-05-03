@@ -29,7 +29,7 @@ Mappings:
       LinePayIsSandbox: True or False
       PayPayApiKey: PayPayApiKey
       PayPayApiSecret: PayPayApiSecret
-      PayPayApiMerchantPaymentId: PayPayApiMerchantPaymentId
+      PayPayApiMerchantId: PayPayApiMerchantId
       PayPayIsProd: True or False
       PayPayIsSandbox: True or False
       ItemListDBName: ItemListDBName
@@ -57,7 +57,7 @@ Mappings:
       LinePayIsSandbox: True or False
       PayPayApiKey: PayPayApiKey
       PayPayApiSecret: PayPayApiSecret
-      PayPayApiMerchantPaymentId: PayPayApiMerchantPaymentId
+      PayPayApiMerchantId: PayPayApiMerchantId
       PayPayIsProd: True or False
       PayPayIsSandbox: True or False
       ItemListDBName: ItemListDBName
@@ -382,8 +382,8 @@ Resources:
             !FindInMap [EnvironmentMap, !Ref Environment, PayPayApiKey]
           PAY_PAY_API_SECRET:
             !FindInMap [EnvironmentMap, !Ref Environment, PayPayApiSecret]
-          PAY_PAY_API_MERCHANTPAYMENTID:
-            !FindInMap [EnvironmentMap, !Ref Environment, PayPayApiMerchantPaymentId]
+          PAY_PAY_API_MERCHANT_ID:
+            !FindInMap [EnvironmentMap, !Ref Environment, PayPayApiMerchantId]
           PAY_PAY_IS_PROD:
             !FindInMap [EnvironmentMap, !Ref Environment, PayPayIsProd]
           REDIRECT_URL:
@@ -422,8 +422,8 @@ Resources:
             !FindInMap [EnvironmentMap, !Ref Environment, PayPayApiKey]
           PAY_PAY_API_SECRET:
             !FindInMap [EnvironmentMap, !Ref Environment, PayPayApiSecret]
-          PAY_PAY_API_MERCHANTPAYMENTID:
-            !FindInMap [EnvironmentMap, !Ref Environment, PayPayApiMerchantPaymentId]
+          PAY_PAY_API_MERCHANT_ID:
+            !FindInMap [EnvironmentMap, !Ref Environment, PayPayApiMerchantId]
           PAY_PAY_IS_PROD:
             !FindInMap [EnvironmentMap, !Ref Environment, PayPayIsProd]
           LOGGER_LEVEL:
