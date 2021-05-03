@@ -26,18 +26,18 @@ Mappings:
       LiffUrl: LIFF URL
       LinePayChannelId: LinePayChannelId
       LinePayChannelSecret: LinePayChannelSecret
-      LinePayIsSandbox: True or False
+      LinePayIsSandbox: True
       PayPayApiKey: PayPayApiKey
       PayPayApiSecret: PayPayApiSecret
       PayPayApiMerchantId: PayPayApiMerchantId
-      PayPayIsProd: True or False
-      ItemListDBName: ItemListDBName
-      PaymentInfoDBName: PaymentInfoDBName
+      PayPayIsProd: False
+      ItemListDBName: ItemListDB
+      PaymentInfoDBName: PaymentInfoDB
       LINEChannelAccessTokenDBName: LINEChannelAccessTokenDBTableOrderDev
       FrontS3BucketName: S3 Name for FrontEnd
-      LayerVersion: Layer Version
-      LoggerLevel: INFO or DEBUG
-      LambdaMemorySize: 128 to 3008
+      LayerVersion: 1
+      LoggerLevel: DEBUG
+      LambdaMemorySize: 128
       # TTL is True:Reservation Data will be deleted at the specified date, False:Data will not be deleted
       TTL: False
       # Set day to delete data
