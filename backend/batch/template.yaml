@@ -22,7 +22,7 @@ Mappings:
     dev:
       LINEChannelAccessTokenDBName: LINEChannelAccessTokenDBTableOrderDev
       EventBridgeName: EventBridgeNameTableOrderDev
-      LayerVersion: Layer LayerVersion
+      LayerVersion: 1
       LoggerLevel: DEBUG
     prod:
       LINEChannelAccessTokenDBName: LINEChannelAccessTokenDBTableOrderProd
