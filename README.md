@@ -8,6 +8,8 @@
 ※ ドキュメントなどの文言は日本語対応となっています。  
 ※ This document is written in only Japanese for now. We’ll translate it later as soon as possible.
 
+# [Cloud9環境の準備](./docs/cloud9.md)
+
 # Libraries
 ## Node.js
 
@@ -26,13 +28,6 @@ https://nodejs.org/ja/download/
 ## Python
 
 Pythonのバージョン3.8以上がインストール済みでない場合、インストールしてください。  
-2021-04-28時点では、Pythonは3.7.9がインストールされているため、3.8を以下のコマンドでインストールしてください。
-
-```
-git clone https://github.com/jaws-ug-kanazawa/line-api-use-case-table-order.git
-cd line-api-use-case-table-order/tools/
-sh install_python3.8.sh
-```
 
 コマンドプロンプト、又はターミナルにて以下のコマンドを入力し、インストール済みか確認できます。
 ```
@@ -59,26 +54,6 @@ Mac: https://www.python.jp/install/macos/index.html
 ※ SAM CLIの推奨バージョンは1.15.0以上  
 ※ Docker のインストールもローカルテストの有無に関わらず必要です。
 
-## ディスク容量の拡張
-
-Cloud9の初期EBSサイズは10GiBです。SAMを利用する際に10GBを超える容量のサイズが必要となるため、以下の方法にてEBSボリュームサイズを20GBに変更してください。
-
-```
-cd line-api-use-case-table-order/tools/
-sh resize.sh 20
-```
-
-df -Hのコマンドを実行し、/dev/xvda1が20GiB(22GB)になっていることを確認してください。
-```
-Filesystem      Size  Used Avail Use% Mounted on
-devtmpfs        497M     0  497M   0% /dev
-tmpfs           516M     0  516M   0% /dev/shm
-tmpfs           516M  566k  515M   1% /run
-tmpfs           516M     0  516M   0% /sys/fs/cgroup
-/dev/xvda1       22G   12G   11G  52% /
-tmpfs           104M     0  104M   0% /run/user/1000
-tmpfs           104M     0  104M   0% /run/user/0
-```
 
 ### 公式ドキュメントの参考箇所
 公式ドキュメントの以下の項目を完了させ、次の手順に進んでください。なお、既に導入済みのものは適宜飛ばして下さい。  
