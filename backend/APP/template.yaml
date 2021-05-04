@@ -622,7 +622,7 @@ Resources:
         Origins:
           - ConnectionAttempts: 3
             ConnectionTimeout: 10
-            DomainName: !GetAtt FrontBucket.DomainName
+            DomainName: !Sub "${FrontBucket}.s3.${AWS::Region}.amazonaws.com"
             Id: !Sub "S3-${FrontBucket}"
             OriginPath: ""
             S3OriginConfig:
@@ -670,7 +670,7 @@ Resources:
         DefaultRootObject: "index.html"
         IPV6Enabled: true
         Logging:
-          Bucket: !GetAtt FrontBucket.DomainName
+          Bucket: !Sub "${FrontBucket}.s3.${AWS::Region}.amazonaws.com"
           Prefix: log
   CloudFrontOriginAccessIdentity:
     Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
