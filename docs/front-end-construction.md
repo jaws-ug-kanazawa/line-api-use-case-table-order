@@ -39,12 +39,16 @@
     ```
     yarn run build
     ```
-    ビルドが完了したら front/dist フォルダが生成されています。 dist フォルダ内のファイルが S3 配置対象になります。
+    ビルドにはしばらく時間がかかります。
+    ビルドが完了したら front/dist フォルダが生成されています。 
+    dist フォルダ内のファイルが S3 配置対象になります。
 
 1. S3 にフロントエンドのモジュールを配置
 
-    上記、静的ビルドでビルドしたモジュール (※ dist フォルダの中身全部) を対象のS3に配置してください。
-
+    上記、静的ビルドでビルドしたモジュール (※ dist フォルダの中身全部) を[4.アプリのデプロイ(APP)](back-end-construction.md#4アプリのデプロイapp)で設定したS3バケット(FrontS3BucketName)に配置してください。
+    ```
+    aws s3 cp ./dist/ s3://(設定したS3バケット(FrontS3BucketName))/ --recursive
+    ```
 
 [次の頁へ](test-data-charge.md)
 
