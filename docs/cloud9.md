@@ -18,11 +18,11 @@ https://qiita.com/Keisuke69/items/af87eb8629ad4249bd22
 - AWS マネジメントコンソールのサービス一覧から [Cloud9] を選択します。
 - [Create environment] をクリックします。
 
-![cloud9マネジメントコンソール](cloud9console.png)
+![cloud9マネジメントコンソール](images/cloud9console.png)
 
 - [Name] 欄に [PayPayDevEnv] と入力します。
 
-![cloud9環境名](cloud9name.png)
+![cloud9環境名](images/cloud9name.png)
 
 - [Next Step] をクリックします。
 
@@ -33,27 +33,27 @@ https://qiita.com/Keisuke69/items/af87eb8629ad4249bd22
 * Cost-saving setting: [After 30 minutes] （アイドル状態が30分続くと自動的にEC2インスタンスを停止する設定です）
 * IAM Role: [AWSServiceRoleForAWSCloud9]  (変更できません)
 
-![cloud9詳細](cloud9detail.png)
+![cloud9詳細](images/cloud9detail.png)
 
 - [Network settings (advanced)] をクリックして展開します。
 Cloud9環境を構築する VPC および サブネット を指定できますので、任意のVPCを指定してください。サブネットは「パブリックサブネット」であるものを指定してください。
 不明な場合はデフォルトVPC（名前に「(default)」が付いたVPC）を選択すれば問題ありません。
 
-![cloud9VPC](cloud9vpc.png)
+![cloud9VPC](images/cloud9vpc.png)
 
 - [Next Step] をクリックします。
 
 - 確認画面になりますので、[Create environment] をクリックします。
 
-![cloud9確認画面](cloud9confirm.png)
+![cloud9確認画面](images/cloud9confirm.png)
 
 - Cloud9環境の作成が始まります。完成まで数分間かかります。
 
-![cloud9作成画面](cloud9creating.png)
+![cloud9作成画面](images/cloud9creating.png)
 
 - Cloud9環境が作成されました。
 
-![cloud9作成完了画面](cloud9created.png)
+![cloud9作成完了画面](images/cloud9created.png)
 
 
 ## Pythonのバージョンアップ
