@@ -15,7 +15,7 @@ LIFF_CHANNEL_ID = os.getenv('LIFF_CHANNEL_ID', None)
 # PayPay API情報
 PAY_PAY_API_KEY = os.environ.get("PAY_PAY_API_KEY")
 PAY_PAY_API_SECRET = os.environ.get("PAY_PAY_API_SECRET")
-PAY_PAY_API_MERCHANTPAYMENTID = os.environ.get("PAY_PAY_API_MERCHANTPAYMENTID")
+PAY_PAY_API_MERCHANT_ID = os.environ.get("PAY_PAY_API_MERCHANT_ID")
 if (os.environ.get("PAY_PAY_IS_PROD") == 'True'
     or os.environ.get("PAY_PAY_IS_PROD") == 'true'): 
     PAY_PAY_IS_PROD = True
@@ -24,7 +24,7 @@ else:
 
 client = paypayopa.Client(auth=(PAY_PAY_API_KEY, PAY_PAY_API_SECRET),
                          production_mode=PAY_PAY_IS_PROD)
-client.set_assume_merchant(PAY_PAY_API_MERCHANTPAYMENTID)
+client.set_assume_merchant(PAY_PAY_API_MERCHANT_ID)
 
 # ログ出力の設定
 logger = logging.getLogger()

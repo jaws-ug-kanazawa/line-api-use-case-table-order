@@ -26,19 +26,18 @@ Mappings:
       LiffUrl: LIFF URL
       LinePayChannelId: LinePayChannelId
       LinePayChannelSecret: LinePayChannelSecret
-      LinePayIsSandbox: True or False
+      LinePayIsSandbox: True
       PayPayApiKey: PayPayApiKey
       PayPayApiSecret: PayPayApiSecret
-      PayPayApiMerchantPaymentId: PayPayApiMerchantPaymentId
-      PayPayIsProd: True or False
-      PayPayIsSandbox: True or False
-      ItemListDBName: ItemListDBName
-      PaymentInfoDBName: PaymentInfoDBName
+      PayPayApiMerchantId: PayPayApiMerchantId
+      PayPayIsProd: False
+      ItemListDBName: ItemListDB
+      PaymentInfoDBName: PaymentInfoDB
       LINEChannelAccessTokenDBName: LINEChannelAccessTokenDBTableOrderDev
       FrontS3BucketName: S3 Name for FrontEnd
-      LayerVersion: Layer Version
-      LoggerLevel: INFO or DEBUG
-      LambdaMemorySize: 128 to 3008
+      LayerVersion: 1
+      LoggerLevel: DEBUG
+      LambdaMemorySize: 128
       # TTL is True:Reservation Data will be deleted at the specified date, False:Data will not be deleted
       TTL: False
       # Set day to delete data
@@ -57,9 +56,8 @@ Mappings:
       LinePayIsSandbox: True or False
       PayPayApiKey: PayPayApiKey
       PayPayApiSecret: PayPayApiSecret
-      PayPayApiMerchantPaymentId: PayPayApiMerchantPaymentId
+      PayPayApiMerchantId: PayPayApiMerchantId
       PayPayIsProd: True or False
-      PayPayIsSandbox: True or False
       ItemListDBName: ItemListDBName
       PaymentInfoDBName: PaymentInfoDBName
       LINEChannelAccessTokenDBName: LINEChannelAccessTokenDBTableOrderProd
@@ -382,8 +380,8 @@ Resources:
             !FindInMap [EnvironmentMap, !Ref Environment, PayPayApiKey]
           PAY_PAY_API_SECRET:
             !FindInMap [EnvironmentMap, !Ref Environment, PayPayApiSecret]
-          PAY_PAY_API_MERCHANTPAYMENTID:
-            !FindInMap [EnvironmentMap, !Ref Environment, PayPayApiMerchantPaymentId]
+          PAY_PAY_API_MERCHANT_ID:
+            !FindInMap [EnvironmentMap, !Ref Environment, PayPayApiMerchantId]
           PAY_PAY_IS_PROD:
             !FindInMap [EnvironmentMap, !Ref Environment, PayPayIsProd]
           REDIRECT_URL:
@@ -422,8 +420,8 @@ Resources:
             !FindInMap [EnvironmentMap, !Ref Environment, PayPayApiKey]
           PAY_PAY_API_SECRET:
             !FindInMap [EnvironmentMap, !Ref Environment, PayPayApiSecret]
-          PAY_PAY_API_MERCHANTPAYMENTID:
-            !FindInMap [EnvironmentMap, !Ref Environment, PayPayApiMerchantPaymentId]
+          PAY_PAY_API_MERCHANT_ID:
+            !FindInMap [EnvironmentMap, !Ref Environment, PayPayApiMerchantId]
           PAY_PAY_IS_PROD:
             !FindInMap [EnvironmentMap, !Ref Environment, PayPayIsProd]
           LOGGER_LEVEL:
