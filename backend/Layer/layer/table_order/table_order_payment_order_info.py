@@ -102,6 +102,7 @@ class TableOrderPaymentOrderInfo(DynamoDB):
             "order": order_info['order'],
             "userId": order_info['userId'],
             "transactionId": 0,
+            "qrcodeId": '0',
             'createdTime': datetime.now(
                 gettz('Asia/Tokyo')).strftime("%Y/%m/%d %H:%M:%S"),
             'updatedTime': datetime.now(
@@ -189,6 +190,40 @@ class TableOrderPaymentOrderInfo(DynamoDB):
             ':transactionId': transaction_id,
             ':expirationDate': utils.get_ttl_time(now),
             ':paidDatetime': datetime_now,
+            ':updatedTime': datetime.now(
+                gettz('Asia/Tokyo')).strftime("%Y/%m/%d %H:%M:%S")
+        }
+        return_value = "UPDATED_NEW"
+
+        try:
+            response = self._update_item(
+                key, update_expression, expression_value, return_value)
+        except Exception as e:
+            raise e
+        return response
+        
+    def update_payment_qrcode(self, payment_id, qrcode_id):
+        """
+        データ更新
+
+        Parameters
+        ----------
+        qrcode_id:str
+            QRCode ID
+
+        Returns
+        -------
+        response :dict
+            DB更新レスポンス情報
+
+        """
+        key = {'paymentId': payment_id}
+        update_expression = ('set qrcodeId = :qrcodeId, '
+                             'updatedTime = :updatedTime')
+        now = datetime.now(gettz('Asia/Tokyo'))
+        datetime_now = str(now)
+        expression_value = {
+            ':qrcodeId': qrcode_id,
             ':updatedTime': datetime.now(
                 gettz('Asia/Tokyo')).strftime("%Y/%m/%d %H:%M:%S")
         }

@@ -143,7 +143,7 @@ const VueTableorder = ($axios, app, store, env) => {
          *
          * @param {string} transactionId 決済トランザクションID
          * @param {string} paymentId 会計ID
-         * @return {Object} 決済状況
+         * @return {boolean} 決済状況
          */
         async getPaymentDetails(paymentId) {
             const params = {"paymentId": paymentId};
@@ -306,17 +306,17 @@ const VueTableorder = ($axios, app, store, env) => {
              * 決済詳細取得API
              *
              * @param {Object} params 送信パラメーター
-             * @return {Object} APIレスポンス内容 
+             * @return {boolean} 決済状況
              */
             getPaymentDetails: async(params) => {
                 // 送信パラメーターロケール付加
                 params['locale'] = store.state.locale;
                 // POST送信
                 const response = await $axios.post(`${_stage}/payment_get_payment_details`, params);
-                if ( response && response.status >= 400 ) {
+                if ( response && response.data.status != "COMPLETED" ) {
                     store.commit("paymentError", true);
                 }
-                return response.status==200 ? false : true;
+                return response.data.status=="COMPLETED" ? false : true;
             },
             /**
              * 会計ID取得API
@@ -530,7 +530,7 @@ const VueTableorder = ($axios, app, store, env) => {
              *決済詳細取得API
              *
              * @param {Object} params 送信パラメーター
-             * @return {Object} APIレスポンス内容 
+             * @return {boolean} 決済状況
              */
             getPaymentDetails: async(params) => {
                 let response = null;
@@ -544,6 +544,7 @@ const VueTableorder = ($axios, app, store, env) => {
                 let isError = false;
                 try {
                     response = await app.$amplify.API.post("LambdaAPIGateway", `${_stage}/payment_get_payment_details`, myInit);
+                    isError = response.data.status=="COMPLETED" ? false : true;
                 } catch (error) {
                     app.$utils.showHttpError(error);
                     isError = true;

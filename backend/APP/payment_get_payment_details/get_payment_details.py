@@ -10,6 +10,7 @@ from common.channel_access_token import ChannelAccessToken
 from table_order.table_order_payment_order_info import TableOrderPaymentOrderInfo  # noqa501
 
 import paypayopa
+import polling
 
 # 環境変数
 LOGGER_LEVEL = os.environ.get("LOGGER_LEVEL")
@@ -65,6 +66,27 @@ def send_messages(body):
         line.send_push_message(
             channel_access_token['channelAccessToken'], flex_obj, body['userId'])
 
+def fetch_payment_details(merchant_payment_id):
+    """
+    支払いの詳細を取得する
+    Parameters
+    ----------
+    merchant_payment_id
+        販売者が提供する一意の支払いトランザクションID
+    Returns
+    -------
+    status
+    """
+    resp = client.Code.get_payment_details(merchant_payment_id)
+    if (resp['data'] == 'None'):
+        return {
+            'error': 'true'
+        }
+    return resp['data']['status']
+
+def is_correct_response(resp):
+    logger.info(resp)
+    return resp
 
 def lambda_handler(event, context):
     """
@@ -108,7 +130,12 @@ def lambda_handler(event, context):
             payment_id, transaction_id)
         # PayPayAPI決済詳細取得
         try:
-            resp = client.Payment.get_payment_details(payment_id)
+            polling.poll(
+                lambda: fetch_payment_details(payment_id) == 'COMPLETED' or fetch_payment_details(payment_id) == 'FAILED',
+                check_success=is_correct_response,
+                step=2,
+                timeout=20)
+            resp = client.Code.get_payment_details(payment_id)
             
             res_body = json.dumps(resp)
         except Exception as e:
@@ -133,11 +160,5 @@ def lambda_handler(event, context):
 
 
     except Exception as e:
-        if transaction_id is not None and transaction_id == 0:
-            logger.critical(
-                'payment_id: %s could not update, please update transaction_id = 0 manually and confirm the payment',  # noqa 501
-                payment_id)
-        else:
-            logger.error('Occur Exception: %s', e)
+        logger.error('Occur Exception: %s', e)
         return utils.create_error_response("Error")
-
