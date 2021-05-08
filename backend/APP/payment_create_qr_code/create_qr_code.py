@@ -84,17 +84,14 @@ def lambda_handler(event, context):
         "codeType": "ORDER_QR",
         "redirectUrl": f'{REDIRECT_URL}/tableorder/paymentCompleted?orderId={payment_id}',
         "redirectType":"WEB_LINK",
-        "orderDescription":'LINE Use Case Barger',
-        "orderItems": [{
-            "name": 'オーダー商品',
-            "category": "pasteries",
-            "quantity": 1,
-            "productId": "67678",
-            "unitPrice": {
-                "amount": amount,
-                "currency": "JPY"
-            }
-        }],
+        "orderDescription":'オーダー商品',
+        "orderItems": [ {
+            "name": item['itemName'], \
+            "category": 'food', \
+            "quantity": int(item['orderNum']), \
+            "productId": int(item['itemId']), \
+            "unitPrice": { "amount": int(item['price']), "currency": "JPY" } \
+            } for item in payment_info['order'][0]['item'] ],
         "amount": {
             "amount": amount,
             "currency": "JPY"
@@ -103,14 +100,25 @@ def lambda_handler(event, context):
 
     try:
         resp = client.Code.create_qr_code(request)
-        
+        logger.debug(resp)
         # 返却データ
         res_body = json.dumps(resp)
     except Exception as e:
         logger.error('Occur Exception: %s', e)
         return utils.create_error_response("Error")
     else:
-        if resp['resultInfo']['code'] == 'SUCCESS':
-            return utils.create_success_response(res_body)
-        else:
+        try:
+            if resp['resultInfo']['code'] == 'SUCCESS':
+                payment_order_table_controller.update_payment_qrcode(
+                    payment_id, resp['data']['codeId'])
+                return utils.create_success_response(res_body)
+            elif resp['resultInfo']['code'] == 'DUPLICATE_DYNAMIC_QR_REQUEST':
+                logger.error('PayPay Duplicate QR Request Error')
+                client.Code.delete_qr_code(payment_info['qrcodeId'])
+                return utils.create_error_response("Error")
+            else:
+                logger.error('PayPay Error')
+                return utils.create_error_response("Error")
+        except Exception as e:
+            logger.error('Occur Exception: %s', e)
             return utils.create_error_response("Error")
